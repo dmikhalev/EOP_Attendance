@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "third_party/sqlite3.h"
-#include "EOP/attendance/db/tables/EOP_Attendance_Table.h"
-#include "EOP/attendance/entities/EOP_Attendance.h"
-#include "EOP/attendance/mapper/EOP_Attendance_mapper.h"
+#include <third_party/sqlite3.h>
+#include <EOP/attendance/db/tables/EOP_Attendance_Table.h>
+#include <EOP/attendance/entities/EOP_Attendance.h>
+#include <EOP/attendance/mapper/EOP_Attendance_mapper.h>
 
 #ifndef EOP_EOP_ATTENDANCE_DAO_H
 #define EOP_EOP_ATTENDANCE_DAO_H
