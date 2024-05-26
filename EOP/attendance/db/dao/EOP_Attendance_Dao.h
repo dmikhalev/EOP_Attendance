@@ -16,4 +16,8 @@ int EOP_Save_attendance_list(struct mg_str attendanceList);
 
 char *EOP_Get_attendance_list(EOP_Attendance filter);
 
+int EOP_Update_attendance(EOP_Attendance attendance);
+
+int EOP_Delete_attendance(long attendance_id);
+
 #endif //EOP_EOP_ATTENDANCE_DAO_H
