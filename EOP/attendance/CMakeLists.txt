@@ -1,7 +1,7 @@
 
 add_library(EOP_Attendance
-        entities/EOP_Attendance.c
-        entities/EOP_Attendance.h
+        EOP_Attendance.c
+        EOP_Attendance.h
         controller/controllers_register.c
         controller/controllers_register.h
         db/tables/EOP_Attendance_Table.c

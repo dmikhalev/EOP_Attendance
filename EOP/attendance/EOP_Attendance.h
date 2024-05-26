@@ -7,6 +7,8 @@ extern "C" {
 
 #include <time.h>
 #include <stdbool.h>
+#include <third_party/mongoose.h>
+#include <third_party/sqlite3.h>
 
 typedef struct {
     long id;
@@ -16,6 +18,10 @@ typedef struct {
     bool is_visit;
     const char *date;
 } EOP_Attendance;
+
+void api_matcher(struct mg_connection *pConnection, struct mg_http_message *pMessage);
+
+int create_attendance_db(sqlite3 *db, char **err_msg);
 
 #ifdef __cplusplus
 }
