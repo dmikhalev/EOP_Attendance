@@ -94,7 +94,7 @@ char *EOP_Get_attendance_list(EOP_Attendance filter) {
     sqlite3_bind_text(stmt, 5, filter.date, -1, SQLITE_TRANSIENT);
 
     rc = sqlite3_step(stmt);
-    char response[256 * 100]; // todo fix
+    char response[256 * 100];
     while (rc == SQLITE_ROW) {
         EOP_Attendance attendance;
         attendance.id = sqlite3_column_int(stmt, 0);
@@ -163,4 +163,62 @@ int EOP_Delete_attendance(long attendance_id) {
     if (check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
     return 0;
+}
+
+int EOP_Get_visit_count(Count_request request) {
+    sqlite3 *db;
+    int rc = sqlite3_open("attendance.db", &db);
+    if (rc != SQLITE_OK) {
+        sqlite3_close(db);
+        return -1;
+    }
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db,
+                       "SELECT count(*)\n"
+                       "FROM attendance\n"
+                       "WHERE (?1 = -1 OR ?1 = student_id)\n"
+                       "  AND (?2 = -1 OR ?2 = subject_id)\n"
+                       "  AND (?3 = -1 OR ?3 = course)\n"
+                       "  AND is_visit = 1\n",
+                       -1, &stmt, 0);
+    sqlite3_bind_int(stmt, 1, request.student_id);
+    sqlite3_bind_int(stmt, 2, request.subject_id);
+    sqlite3_bind_int(stmt, 3, request.course);
+
+    rc = sqlite3_step(stmt);
+    int result = sqlite3_column_int(stmt, 0);
+    sqlite3_finalize(stmt);
+    if (check_error(rc, db) == 1) return -1;
+    sqlite3_close(db);
+    return result;
+}
+
+int EOP_Get_absence_count(Count_request request) {
+    sqlite3 *db;
+    int rc = sqlite3_open("attendance.db", &db);
+    if (rc != SQLITE_OK) {
+        sqlite3_close(db);
+        return -1;
+    }
+
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(db,
+                       "SELECT count(*)\n"
+                       "FROM attendance\n"
+                       "WHERE (?1 = -1 OR ?1 = student_id)\n"
+                       "  AND (?2 = -1 OR ?2 = subject_id)\n"
+                       "  AND (?3 = -1 OR ?3 = course)\n"
+                       "  AND is_visit = 0\n",
+                       -1, &stmt, 0);
+    sqlite3_bind_int(stmt, 1, request.student_id);
+    sqlite3_bind_int(stmt, 2, request.subject_id);
+    sqlite3_bind_int(stmt, 3, request.course);
+
+    rc = sqlite3_step(stmt);
+    int result = sqlite3_column_int(stmt, 0);
+    sqlite3_finalize(stmt);
+    if (check_error(rc, db) == 1) return -1;
+    sqlite3_close(db);
+    return result;
 }

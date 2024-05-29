@@ -19,6 +19,13 @@ typedef struct {
     const char *date;
 } EOP_Attendance;
 
+typedef struct {
+    long student_id;
+    long subject_id;
+    int course;
+} Count_request;
+
+
 void api_matcher(struct mg_connection *pConnection, struct mg_http_message *pMessage);
 
 int create_attendance_db(sqlite3 *db, char **err_msg);

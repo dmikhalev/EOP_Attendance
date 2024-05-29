@@ -1,7 +1,6 @@
 #include <EOP/attendance/service/EOP_Attendance_service.h>
 #include <EOP/attendance/mapper/EOP_Attendance_mapper.h>
 
-
 bool is_post(struct mg_str method) {
     return strncmp("POST", method.buf, strlen("POST")) == 0;
 }
@@ -63,6 +62,16 @@ void handle_delete(struct mg_connection *pConnection, struct mg_http_message *pM
     }
 }
 
+void handle_count_visit(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    int count = get_count_visit(to_count_request(pMessage->body));
+    mg_http_reply(pConnection, 200, "Content-Type: application/json\r\n", "%s", MG_ESC(count));
+}
+
+void handle_count_absence(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    int count = get_count_absence(to_count_request(pMessage->body));
+    mg_http_reply(pConnection, 200, "Content-Type: application/json\r\n", "%s", MG_ESC(count));
+}
+
 void handle_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     // GET get all
     if (mg_match(pMessage->uri, mg_str("/api/attendance/all"), NULL) && is_get(pMessage->method)) {
@@ -91,6 +100,18 @@ void handle_attendance(struct mg_connection *pConnection, struct mg_http_message
     // DELETE create rows
     if (mg_match(pMessage->uri, mg_str("/api/attendance/delete"), NULL) && is_delete(pMessage->method)) {
         handle_delete(pConnection, pMessage);
+        return;
+    }
+
+    // GET get visit count
+    if (mg_match(pMessage->uri, mg_str("/api/attendance/count/visit"), NULL) && is_get(pMessage->method)) {
+        handle_count_visit(pConnection, pMessage);
+        return;
+    }
+
+    // GET get absence count
+    if (mg_match(pMessage->uri, mg_str("/api/attendance/count/absence"), NULL) && is_get(pMessage->method)) {
+        handle_count_absence(pConnection, pMessage);
         return;
     }
 }

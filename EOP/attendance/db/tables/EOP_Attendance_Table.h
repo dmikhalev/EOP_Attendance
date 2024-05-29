@@ -4,7 +4,6 @@
 
 #define ATTENDANCE "attendance"
 
-
 char *EOP_Attendance_Table_create = "CREATE TABLE IF NOT EXISTS " ATTENDANCE " (\n"
                                     "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                                     "    student_id INTEGER,\n"

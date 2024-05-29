@@ -15,4 +15,8 @@ int update_attendance(EOP_Attendance attendance);
 
 int delete_attendance(long attendance_id);
 
+int get_count_visit(Count_request request);
+
+int get_count_absence(Count_request request);
+
 #endif //EOP_EOP_ATTENDANCE_SERVICE_H

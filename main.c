@@ -23,7 +23,6 @@ static int create_db() {
     return 0;
 }
 
-// Connection event handler function
 static void fn(struct mg_connection *c, int ev, void *ev_data) {
     if (ev == MG_EV_HTTP_MSG) {  // New HTTP request received
         struct mg_http_message *hm = (struct mg_http_message *) ev_data;// Parsed HTTP request

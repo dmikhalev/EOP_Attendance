@@ -7,6 +7,8 @@
 
 EOP_Attendance to_model(struct mg_str json);
 
+Count_request to_count_request(struct mg_str json);
+
 char *to_json(EOP_Attendance *attendance);
 
 #endif //EOP_EOP_ATTENDANCE_MAPPER_H
