@@ -4,9 +4,18 @@ int EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg) {
     return sqlite3_exec(db, EOP_Attendance_Table_create, 0, 0, err_msg);
 }
 
+int check_error(int rc, sqlite3 *db) {
+    if (rc != SQLITE_DONE) {
+        printf("SQL error");
+        sqlite3_free(0);
+        sqlite3_close(db);
+        return 1;
+    }
+    return 0;
+}
+
 int EOP_Save_attendance(EOP_Attendance attendance) {
     sqlite3 *db;
-    char *err_msg = 0;
     int rc = sqlite3_open("attendance.db", &db);
     if (rc != SQLITE_OK) {
         sqlite3_close(db);
@@ -25,20 +34,13 @@ int EOP_Save_attendance(EOP_Attendance attendance) {
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (rc != SQLITE_DONE) {
-        printf("SQL error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-        return 1;
-    }
+    if (check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
-    printf("Attendance saved");
     return 0;
 }
 
 int EOP_Save_attendance_list(struct mg_str attendanceList) {
     sqlite3 *db;
-    char *err_msg = 0;
     int rc = sqlite3_open("attendance.db", &db);
     if (rc != SQLITE_OK) {
         sqlite3_close(db);
@@ -61,22 +63,14 @@ int EOP_Save_attendance_list(struct mg_str attendanceList) {
 
         rc = sqlite3_step(stmt);
         sqlite3_finalize(stmt);
-        if (rc != SQLITE_DONE) {
-            printf("SQL error: %s\n", err_msg);
-            sqlite3_free(err_msg);
-            sqlite3_close(db);
-            return 1;
-        }
-//        printf("%.*s -> %.*s\n", (int) key.len, key.buf, (int) val.len, val.buf);
+        if (check_error(rc, db) == 1) return 1;
     }
     sqlite3_close(db);
-    printf("Attendance list saved");
     return 0;
 }
 
 char *EOP_Get_attendance_list(EOP_Attendance filter) {
     sqlite3 *db;
-    char *err_msg = 0;
     int rc = sqlite3_open("attendance.db", &db);
     if (rc != SQLITE_OK) {
         sqlite3_close(db);
@@ -118,12 +112,7 @@ char *EOP_Get_attendance_list(EOP_Attendance filter) {
     }
     sprintf(response, "%s\n]", response);
     sqlite3_finalize(stmt);
-    if (rc != SQLITE_DONE) {
-        printf("SQL error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-        return NULL;
-    }
+    if (check_error(rc, db) == 1) return "";
     sqlite3_close(db);
 
     return response;
@@ -131,7 +120,6 @@ char *EOP_Get_attendance_list(EOP_Attendance filter) {
 
 int EOP_Update_attendance(EOP_Attendance attendance) {
     sqlite3 *db;
-    char *err_msg = 0;
     int rc = sqlite3_open("attendance.db", &db);
     if (rc != SQLITE_OK) {
         sqlite3_close(db);
@@ -151,20 +139,13 @@ int EOP_Update_attendance(EOP_Attendance attendance) {
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (rc != SQLITE_DONE) {
-        printf("SQL error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-        return 1;
-    }
+    if (check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
-    printf("Attendance updated");
     return 0;
 }
 
 int EOP_Delete_attendance(long attendance_id) {
     sqlite3 *db;
-    char *err_msg = 0;
     int rc = sqlite3_open("attendance.db", &db);
     if (rc != SQLITE_OK) {
         sqlite3_close(db);
@@ -179,13 +160,7 @@ int EOP_Delete_attendance(long attendance_id) {
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (rc != SQLITE_DONE) {
-        printf("SQL error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-        return 1;
-    }
+    if (check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
-    printf("Attendance deleted");
     return 0;
 }
