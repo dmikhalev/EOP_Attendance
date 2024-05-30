@@ -3,7 +3,7 @@
 #include <EOP/attendance/EOP_Attendance.h>
 
 
-bool isOk(int rc) {
+static bool isOk(int rc) {
     return rc != SQLITE_OK;
 }
 
@@ -16,7 +16,7 @@ static int create_db() {
         return 1;
     }
 
-    rc = create_attendance_db(db, &err_msg);
+    rc = EOP_Attendance_create_attendance_db(db, &err_msg);
     if (!isOk(rc)) {
         printf("SQL error: %s\n", err_msg);
         sqlite3_free(err_msg);
@@ -30,7 +30,7 @@ static int create_db() {
 static void fn(struct mg_connection *c, int ev, void *ev_data) {
     if (ev == MG_EV_HTTP_MSG) {  // New HTTP request received
         struct mg_http_message *hm = (struct mg_http_message *) ev_data;// Parsed HTTP request
-        api_matcher(c, hm);
+        EOP_Attendance_api_matcher(c, hm);
     }
 }
 

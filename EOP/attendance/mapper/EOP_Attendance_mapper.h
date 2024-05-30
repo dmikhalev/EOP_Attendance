@@ -5,16 +5,24 @@
 #include <third_party/mongoose.h>
 #include <third_party/sqlite3.h>
 
-EOP_Attendance to_model(struct mg_str json);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-Count_request to_count_request(struct mg_str json);
+EOP_Attendance EOP_Attendance_Mapper_to_attendance(struct mg_str json);
 
-Delete_attendance_request to_delete_attendance_request(struct mg_str json);
+Count_request EOP_Attendance_Mapper_to_count_request(struct mg_str json);
 
-Delete_student_attendance_request to_delete_student_attendance_request(struct mg_str json);
+Delete_attendance_request EOP_Attendance_Mapper_to_delete_attendance_request(struct mg_str json);
 
-Delete_subject_attendance_request to_delete_subject_attendance_request(struct mg_str json);
+Delete_student_attendance_request EOP_Attendance_Mapper_to_delete_student_attendance_request(struct mg_str json);
 
-char *to_json(EOP_Attendance *attendance);
+Delete_subject_attendance_request EOP_Attendance_Mapper_to_delete_subject_attendance_request(struct mg_str json);
+
+char *EOP_Attendance_Mapper_to_json(EOP_Attendance *attendance);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //EOP_EOP_ATTENDANCE_MAPPER_H

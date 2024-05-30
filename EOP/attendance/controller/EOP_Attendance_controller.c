@@ -1,36 +1,36 @@
 #include <EOP/attendance/service/EOP_Attendance_service.h>
 #include <EOP/attendance/mapper/EOP_Attendance_mapper.h>
 
-bool is_post(struct mg_str method) {
+static bool is_post(struct mg_str method) {
     return strncmp("POST", method.buf, strlen("POST")) == 0;
 }
 
-bool is_get(struct mg_str method) {
+static bool is_get(struct mg_str method) {
     return strncmp("GET", method.buf, strlen("GET")) == 0;
 }
 
-bool is_put(struct mg_str method) {
+static bool is_put(struct mg_str method) {
     return strncmp("PUT", method.buf, strlen("PUT")) == 0;
 }
 
-bool is_delete(struct mg_str method) {
+static bool is_delete(struct mg_str method) {
     return strncmp("DELETE", method.buf, strlen("DELETE")) == 0;
 }
 
-void error_replay(struct mg_connection *pConnection) {
+static void error_replay(struct mg_connection *pConnection) {
     mg_http_reply(pConnection, 400, "", "Error");
 }
 
-void success_200_replay(struct mg_connection *pConnection) {
+static void success_200_replay(struct mg_connection *pConnection) {
     mg_http_reply(pConnection, 200, "", "Success");
 }
 
-void success_201_replay(struct mg_connection *pConnection) {
+static void success_201_replay(struct mg_connection *pConnection) {
     mg_http_reply(pConnection, 201, "", "Success");
 }
 
-void handle_get_all(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    char *response = get_attendance_list(to_model(pMessage->body));
+static void handle_get_all(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    char *response = EOP_Attendance_Service_get_attendance_list(EOP_Attendance_Mapper_to_attendance(pMessage->body));
     if (response != NULL) {
         mg_http_reply(pConnection, 200, "Content-Type: application/json\r\n", "%s", MG_ESC(response));
     } else {
@@ -38,65 +38,68 @@ void handle_get_all(struct mg_connection *pConnection, struct mg_http_message *p
     }
 }
 
-void handle_create_one(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    if (save_attendance(to_model(pMessage->body)) == 0) {
+static void handle_create_one(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (EOP_Attendance_Service_save_attendance(EOP_Attendance_Mapper_to_attendance(pMessage->body)) == 0) {
         success_201_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
 }
 
-void handle_create_list(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    if (save_attendance_list(pMessage->body) == 0) {
+static void handle_create_list(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (EOP_Attendance_Service_save_attendance_list(pMessage->body) == 0) {
         success_201_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
 }
 
-void handle_update(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    if (update_attendance(to_model(pMessage->body)) == 0) {
+static void handle_update(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (EOP_Attendance_Service_update_attendance(EOP_Attendance_Mapper_to_attendance(pMessage->body)) == 0) {
         success_200_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
 }
 
-void handle_delete_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    if (delete_attendance(to_delete_attendance_request(pMessage->body)) == 0) {
+static void handle_delete_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (EOP_Attendance_Service_delete_attendance(EOP_Attendance_Mapper_to_delete_attendance_request(pMessage->body)) ==
+        0) {
         success_200_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
 }
 
-void handle_delete_student_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    if (delete_student_attendance(to_delete_student_attendance_request(pMessage->body)) == 0) {
+static void handle_delete_student_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (EOP_Attendance_Service_delete_student_attendance(
+            EOP_Attendance_Mapper_to_delete_student_attendance_request(pMessage->body)) == 0) {
         success_200_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
 }
 
-void handle_delete_subject_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    if (delete_subject_attendance(to_delete_subject_attendance_request(pMessage->body)) == 0) {
+static void handle_delete_subject_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (EOP_Attendance_Service_delete_subject_attendance(
+            EOP_Attendance_Mapper_to_delete_subject_attendance_request(pMessage->body)) == 0) {
         success_200_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
 }
 
-void handle_count_visit(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    int count = get_count_visit(to_count_request(pMessage->body));
+static void handle_count_visit(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    int count = EOP_Attendance_Service_get_count_visit(EOP_Attendance_Mapper_to_count_request(pMessage->body));
     mg_http_reply(pConnection, 200, "Content-Type: application/json\r\n", "%s", MG_ESC(count));
 }
 
-void handle_count_absence(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    int count = get_count_absence(to_count_request(pMessage->body));
+static void handle_count_absence(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    int count = EOP_Attendance_Service_get_count_absence(EOP_Attendance_Mapper_to_count_request(pMessage->body));
     mg_http_reply(pConnection, 200, "Content-Type: application/json\r\n", "%s", MG_ESC(count));
 }
 
-void handle_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+static void EOP_Attendance_handle_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     // GET get all
     if (mg_match(pMessage->uri, mg_str("/api/attendance/all"), NULL) && is_get(pMessage->method)) {
         handle_get_all(pConnection, pMessage);
@@ -152,9 +155,9 @@ void handle_attendance(struct mg_connection *pConnection, struct mg_http_message
     }
 }
 
-void api_match(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+void EOP_Attendance_Controller_api_match(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     if (mg_match(pMessage->uri, mg_str("/api/attendance#"), NULL)) {
-        handle_attendance(pConnection, pMessage);
+        EOP_Attendance_handle_attendance(pConnection, pMessage);
     } else {
         struct mg_http_serve_opts opts = {.root_dir = "."};     // For all other URLs,
         mg_http_serve_dir(pConnection, pMessage, &opts);    // Serve static files
