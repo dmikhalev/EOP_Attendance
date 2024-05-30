@@ -3,17 +3,21 @@
 #include <EOP/attendance/EOP_Attendance.h>
 
 
+bool isOk(int rc) {
+    return rc != SQLITE_OK;
+}
+
 static int create_db() {
     sqlite3 *db;
     char *err_msg = 0;
     int rc = sqlite3_open("attendance.db", &db);
-    if (rc != SQLITE_OK) {
+    if (!isOk(rc)) {
         sqlite3_close(db);
         return 1;
     }
 
     rc = create_attendance_db(db, &err_msg);
-    if (rc != SQLITE_OK) {
+    if (!isOk(rc)) {
         printf("SQL error: %s\n", err_msg);
         sqlite3_free(err_msg);
         sqlite3_close(db);

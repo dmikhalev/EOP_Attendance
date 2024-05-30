@@ -21,6 +21,14 @@ void error_replay(struct mg_connection *pConnection) {
     mg_http_reply(pConnection, 400, "", "Error");
 }
 
+void success_200_replay(struct mg_connection *pConnection) {
+    mg_http_reply(pConnection, 200, "", "Success");
+}
+
+void success_201_replay(struct mg_connection *pConnection) {
+    mg_http_reply(pConnection, 201, "", "Success");
+}
+
 void handle_get_all(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     char *response = get_attendance_list(to_model(pMessage->body));
     if (response != NULL) {
@@ -32,7 +40,7 @@ void handle_get_all(struct mg_connection *pConnection, struct mg_http_message *p
 
 void handle_create_one(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     if (save_attendance(to_model(pMessage->body)) == 0) {
-        mg_http_reply(pConnection, 201, "", "Success");
+        success_201_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
@@ -40,7 +48,7 @@ void handle_create_one(struct mg_connection *pConnection, struct mg_http_message
 
 void handle_create_list(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     if (save_attendance_list(pMessage->body) == 0) {
-        mg_http_reply(pConnection, 201, "", "Success");
+        success_201_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
@@ -48,15 +56,31 @@ void handle_create_list(struct mg_connection *pConnection, struct mg_http_messag
 
 void handle_update(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     if (update_attendance(to_model(pMessage->body)) == 0) {
-        mg_http_reply(pConnection, 200, "", "Success");
+        success_200_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
 }
 
-void handle_delete(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
-    if (delete_attendance(mg_json_get_long(pMessage->body, "$.id", -1)) == 0) {
-        mg_http_reply(pConnection, 200, "", "Success");
+void handle_delete_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (delete_attendance(to_delete_attendance_request(pMessage->body)) == 0) {
+        success_200_replay(pConnection);
+    } else {
+        error_replay(pConnection);
+    }
+}
+
+void handle_delete_student_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (delete_student_attendance(to_delete_student_attendance_request(pMessage->body)) == 0) {
+        success_200_replay(pConnection);
+    } else {
+        error_replay(pConnection);
+    }
+}
+
+void handle_delete_subject_attendance(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
+    if (delete_subject_attendance(to_delete_subject_attendance_request(pMessage->body)) == 0) {
+        success_200_replay(pConnection);
     } else {
         error_replay(pConnection);
     }
@@ -97,9 +121,21 @@ void handle_attendance(struct mg_connection *pConnection, struct mg_http_message
         return;
     }
 
-    // DELETE create rows
+    // DELETE delete attendance
     if (mg_match(pMessage->uri, mg_str("/api/attendance/delete"), NULL) && is_delete(pMessage->method)) {
-        handle_delete(pConnection, pMessage);
+        handle_delete_attendance(pConnection, pMessage);
+        return;
+    }
+
+    // DELETE delete student attendance
+    if (mg_match(pMessage->uri, mg_str("/api/attendance/delete/student"), NULL) && is_delete(pMessage->method)) {
+        handle_delete_student_attendance(pConnection, pMessage);
+        return;
+    }
+
+    // DELETE delete subject attendance
+    if (mg_match(pMessage->uri, mg_str("/api/attendance/delete/subject"), NULL) && is_delete(pMessage->method)) {
+        handle_delete_subject_attendance(pConnection, pMessage);
         return;
     }
 

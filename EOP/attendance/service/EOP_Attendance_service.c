@@ -1,5 +1,5 @@
 #include <EOP/attendance/db/dao/EOP_Attendance_Dao.h>
-#include <EOP/attendance/service//EOP_Attendance_service.h>
+#include <EOP/attendance/service/EOP_Attendance_service.h>
 
 int validate_id(long id) {
     if (id < 1) {
@@ -49,10 +49,26 @@ int validate_attendance(EOP_Attendance attendance) {
     return 0;
 }
 
+
 int validate_count_request(Count_request request) {
     if (validate_student_id(request.student_id) == 1) return 1;
     if (validate_subject_id(request.subject_id) == 1) return 1;
     if (validate_course(request.course) == 1) return 1;
+    return 0;
+}
+
+int validate_delete_attendance_request(Delete_attendance_request request) {
+    if (validate_id(request.id) == 1) return 1;
+    return 0;
+}
+
+int validate_delete_student_attendance_request(Delete_student_attendance_request request) {
+    if (validate_student_id(request.student_id) == 1) return 1;
+    return 0;
+}
+
+int validate_delete_subject_attendance_request(Delete_subject_attendance_request request) {
+    if (validate_subject_id(request.subject_id) == 1) return 1;
     return 0;
 }
 
@@ -82,10 +98,24 @@ int update_attendance(EOP_Attendance attendance) {
     return result;
 }
 
-int delete_attendance(long attendance_id) {
-    if (validate_id(attendance_id) == 1) return 1;
-    int result = EOP_Delete_attendance(attendance_id);
+int delete_attendance(Delete_attendance_request request) {
+    if (validate_delete_attendance_request(request) == 1) return 1;
+    int result = EOP_Delete_attendance(request.id);
     printf("Attendance deleted");
+    return result;
+}
+
+int delete_student_attendance(Delete_student_attendance_request request) {
+    if (validate_delete_student_attendance_request(request) == 1) return 1;
+    int result = EOP_Delete_student_attendance(request.student_id);
+    printf("Student attendance deleted");
+    return result;
+}
+
+int delete_subject_attendance(Delete_subject_attendance_request request) {
+    if (validate_delete_subject_attendance_request(request) == 1) return 1;
+    int result = EOP_Delete_subject_attendance(request.subject_id);
+    printf("Subject attendance deleted");
     return result;
 }
 

@@ -13,7 +13,11 @@ char *get_attendance_list(EOP_Attendance filter);
 
 int update_attendance(EOP_Attendance attendance);
 
-int delete_attendance(long attendance_id);
+int delete_attendance(Delete_attendance_request request);
+
+int delete_student_attendance(Delete_student_attendance_request request);
+
+int delete_subject_attendance(Delete_subject_attendance_request request);
 
 int get_count_visit(Count_request request);
 

@@ -20,6 +20,10 @@ int EOP_Update_attendance(EOP_Attendance attendance);
 
 int EOP_Delete_attendance(long attendance_id);
 
+int EOP_Delete_student_attendance(long student_id);
+
+int EOP_Delete_subject_attendance(long subject_id);
+
 int EOP_Get_visit_count(Count_request request);
 
 int EOP_Get_absence_count(Count_request request);

@@ -25,6 +25,18 @@ typedef struct {
     int course;
 } Count_request;
 
+typedef struct {
+    long id;
+} Delete_attendance_request;
+
+typedef struct {
+    long student_id;
+} Delete_student_attendance_request;
+
+typedef struct {
+    long subject_id;
+} Delete_subject_attendance_request;
+
 
 void api_matcher(struct mg_connection *pConnection, struct mg_http_message *pMessage);
 
