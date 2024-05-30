@@ -4,11 +4,11 @@ EOP_Attendance_err_code EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg) {
     return sqlite3_exec(db, EOP_Attendance_Table_create, 0, 0, err_msg);
 }
 
-static bool isOk(int rc) {
+static bool EOP_Attendance_is_ok(int rc) {
     return rc == SQLITE_OK;
 }
 
-static int check_error(int rc, sqlite3 *db) {
+static int EOP_Attendance_check_error(int rc, sqlite3 *db) {
     if (rc != SQLITE_DONE) {
         printf("SQL error");
         sqlite3_free(0);
@@ -21,7 +21,7 @@ static int check_error(int rc, sqlite3 *db) {
 EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance(EOP_Attendance attendance) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return 1;
     }
@@ -38,7 +38,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance(EOP_Attendance attend
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return 1;
+    if (EOP_Attendance_check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
     return 0;
 }
@@ -46,7 +46,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance(EOP_Attendance attend
 EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance_list(struct mg_str attendanceList) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return 1;
     }
@@ -67,7 +67,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance_list(struct mg_str at
 
         rc = sqlite3_step(stmt);
         sqlite3_finalize(stmt);
-        if (check_error(rc, db) == 1) return 1;
+        if (EOP_Attendance_check_error(rc, db) == 1) return 1;
     }
     sqlite3_close(db);
     return 0;
@@ -76,7 +76,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance_list(struct mg_str at
 char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return NULL;
     }
@@ -116,7 +116,7 @@ char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
     }
     sprintf(response, "%s\n]", response);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return "";
+    if (EOP_Attendance_check_error(rc, db) == 1) return "";
     sqlite3_close(db);
 
     return response;
@@ -125,7 +125,7 @@ char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
 EOP_Attendance_err_code EOP_Attendance_Dao_update_attendance(EOP_Attendance attendance) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return 1;
     }
@@ -143,7 +143,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_update_attendance(EOP_Attendance atte
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return 1;
+    if (EOP_Attendance_check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
     return 0;
 }
@@ -151,7 +151,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_update_attendance(EOP_Attendance atte
 EOP_Attendance_err_code EOP_Attendance_Dao_delete_attendance(long attendance_id) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return 1;
     }
@@ -164,7 +164,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_delete_attendance(long attendance_id)
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return 1;
+    if (EOP_Attendance_check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
     return 0;
 }
@@ -172,7 +172,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_delete_attendance(long attendance_id)
 EOP_Attendance_err_code EOP_Attendance_Dao_delete_student_attendance(long student_id) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return 1;
     }
@@ -185,7 +185,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_delete_student_attendance(long studen
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return 1;
+    if (EOP_Attendance_check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
     return 0;
 }
@@ -193,7 +193,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_delete_student_attendance(long studen
 EOP_Attendance_err_code EOP_Attendance_Dao_delete_subject_attendance(long subject_id) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return 1;
     }
@@ -206,7 +206,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_delete_subject_attendance(long subjec
 
     rc = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return 1;
+    if (EOP_Attendance_check_error(rc, db) == 1) return 1;
     sqlite3_close(db);
     return 0;
 }
@@ -214,7 +214,7 @@ EOP_Attendance_err_code EOP_Attendance_Dao_delete_subject_attendance(long subjec
 int EOP_Attendance_Dao_get_visit_count(EOP_Attendance_Count_request request) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return -1;
     }
@@ -235,7 +235,7 @@ int EOP_Attendance_Dao_get_visit_count(EOP_Attendance_Count_request request) {
     rc = sqlite3_step(stmt);
     int result = sqlite3_column_int(stmt, 0);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return -1;
+    if (EOP_Attendance_check_error(rc, db) == 1) return -1;
     sqlite3_close(db);
     return result;
 }
@@ -243,7 +243,7 @@ int EOP_Attendance_Dao_get_visit_count(EOP_Attendance_Count_request request) {
 int EOP_Attendance_Dao_get_absence_count(EOP_Attendance_Count_request request) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
-    if (!isOk(rc)) {
+    if (!EOP_Attendance_is_ok(rc)) {
         sqlite3_close(db);
         return -1;
     }
@@ -264,7 +264,7 @@ int EOP_Attendance_Dao_get_absence_count(EOP_Attendance_Count_request request) {
     rc = sqlite3_step(stmt);
     int result = sqlite3_column_int(stmt, 0);
     sqlite3_finalize(stmt);
-    if (check_error(rc, db) == 1) return -1;
+    if (EOP_Attendance_check_error(rc, db) == 1) return -1;
     sqlite3_close(db);
     return result;
 }

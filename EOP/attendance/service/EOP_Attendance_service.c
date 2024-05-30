@@ -1,7 +1,7 @@
 #include <EOP/attendance/db/dao/EOP_Attendance_Dao.h>
 #include <EOP/attendance/service/EOP_Attendance_service.h>
 
-static int validate_id(long id) {
+static int EOP_Attendance_validate_id(long id) {
     if (id < 1) {
         printf("incorrect id");
         return 1;
@@ -9,7 +9,7 @@ static int validate_id(long id) {
     return 0;
 }
 
-static int validate_student_id(long student_id) {
+static int EOP_Attendance_validate_student_id(long student_id) {
     if (student_id < 1) {
         printf("incorrect student_id");
         return 1;
@@ -17,7 +17,7 @@ static int validate_student_id(long student_id) {
     return 0;
 }
 
-static int validate_subject_id(long subject_id) {
+static int EOP_Attendance_validate_subject_id(long subject_id) {
     if (subject_id < 1) {
         printf("incorrect subject_id");
         return 1;
@@ -25,7 +25,7 @@ static int validate_subject_id(long subject_id) {
     return 0;
 }
 
-static int validate_course(int course) {
+static int EOP_Attendance_validate_course(int course) {
     if (course < 1) {
         printf("incorrect course");
         return 1;
@@ -33,7 +33,7 @@ static int validate_course(int course) {
     return 0;
 }
 
-static int validate_date(const char *date) {
+static int EOP_Attendance_validate_date(const char *date) {
     if (strlen(date) < 8 || strlen(date) > 10) {
         printf("incorrect date");
         return 1;
@@ -41,39 +41,39 @@ static int validate_date(const char *date) {
     return 0;
 }
 
-static int validate_attendance(EOP_Attendance attendance) {
-    if (validate_student_id(attendance.student_id) == 1) return 1;
-    if (validate_subject_id(attendance.subject_id) == 1) return 1;
-    if (validate_course(attendance.course) == 1) return 1;
-    if (validate_date(attendance.date) == 1) return 1;
+static int EOP_Attendance_validate_attendance(EOP_Attendance attendance) {
+    if (EOP_Attendance_validate_student_id(attendance.student_id) == 1) return 1;
+    if (EOP_Attendance_validate_subject_id(attendance.subject_id) == 1) return 1;
+    if (EOP_Attendance_validate_course(attendance.course) == 1) return 1;
+    if (EOP_Attendance_validate_date(attendance.date) == 1) return 1;
     return 0;
 }
 
 
-static int validate_count_request(EOP_Attendance_Count_request request) {
-    if (validate_student_id(request.student_id) == 1) return 1;
-    if (validate_subject_id(request.subject_id) == 1) return 1;
-    if (validate_course(request.course) == 1) return 1;
+static int EOP_Attendance_validate_count_request(EOP_Attendance_Count_request request) {
+    if (EOP_Attendance_validate_student_id(request.student_id) == 1) return 1;
+    if (EOP_Attendance_validate_subject_id(request.subject_id) == 1) return 1;
+    if (EOP_Attendance_validate_course(request.course) == 1) return 1;
     return 0;
 }
 
 static int validate_delete_attendance_request(EOP_Attendance_Delete_attendance_request request) {
-    if (validate_id(request.id) == 1) return 1;
+    if (EOP_Attendance_validate_id(request.id) == 1) return 1;
     return 0;
 }
 
 static int validate_delete_student_attendance_request(EOP_Attendance_Delete_student_attendance_request request) {
-    if (validate_student_id(request.student_id) == 1) return 1;
+    if (EOP_Attendance_validate_student_id(request.student_id) == 1) return 1;
     return 0;
 }
 
 static int validate_delete_subject_attendance_request(EOP_Attendance_Delete_subject_attendance_request request) {
-    if (validate_subject_id(request.subject_id) == 1) return 1;
+    if (EOP_Attendance_validate_subject_id(request.subject_id) == 1) return 1;
     return 0;
 }
 
 EOP_Attendance_err_code EOP_Attendance_Service_save_attendance(EOP_Attendance attendance) {
-    if (validate_attendance(attendance) == 1) return 1;
+    if (EOP_Attendance_validate_attendance(attendance) == 1) return 1;
     int result = EOP_Attendance_Dao_save_attendance(attendance);
     printf("Attendance saved");
     return result;
@@ -91,8 +91,8 @@ char *EOP_Attendance_Service_get_attendance_list(EOP_Attendance filter) {
 }
 
 EOP_Attendance_err_code EOP_Attendance_Service_update_attendance(EOP_Attendance attendance) {
-    if (validate_attendance(attendance) == 1) return 1;
-    if (validate_id(attendance.id) == 1) return 1;
+    if (EOP_Attendance_validate_attendance(attendance) == 1) return 1;
+    if (EOP_Attendance_validate_id(attendance.id) == 1) return 1;
     int result = EOP_Attendance_Dao_update_attendance(attendance);
     printf("Attendance updated");
     return result;
@@ -120,14 +120,14 @@ EOP_Attendance_err_code EOP_Attendance_Service_delete_subject_attendance(EOP_Att
 }
 
 int EOP_Attendance_Service_get_count_visit(EOP_Attendance_Count_request request) {
-    if (validate_count_request(request) == 1) return 1;
+    if (EOP_Attendance_validate_count_request(request) == 1) return 1;
     int result = EOP_Attendance_Dao_get_visit_count(request);
     printf("Visit count calculated");
     return result;
 }
 
 int EOP_Attendance_Service_get_count_absence(EOP_Attendance_Count_request request) {
-    if (validate_count_request(request) == 1) return 1;
+    if (EOP_Attendance_validate_count_request(request) == 1) return 1;
     int result = EOP_Attendance_Dao_get_absence_count(request);
     printf("Absence count calculated");
     return result;
