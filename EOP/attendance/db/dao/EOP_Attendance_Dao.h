@@ -11,21 +11,21 @@
 extern "C" {
 #endif
 
-int EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg);
+EOP_Attendance_err_code EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg);
 
-int EOP_Attendance_Dao_save_attendance(EOP_Attendance attendance);
+EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance(EOP_Attendance attendance);
 
-int EOP_Attendance_Dao_save_attendance_list(struct mg_str attendanceList);
+EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance_list(struct mg_str attendanceList);
 
 char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter);
 
-int EOP_Attendance_Dao_update_attendance(EOP_Attendance attendance);
+EOP_Attendance_err_code EOP_Attendance_Dao_update_attendance(EOP_Attendance attendance);
 
-int EOP_Attendance_Dao_delete_attendance(long attendance_id);
+EOP_Attendance_err_code EOP_Attendance_Dao_delete_attendance(long attendance_id);
 
-int EOP_Attendance_Dao_delete_student_attendance(long student_id);
+EOP_Attendance_err_code EOP_Attendance_Dao_delete_student_attendance(long student_id);
 
-int EOP_Attendance_Dao_delete_subject_attendance(long subject_id);
+EOP_Attendance_err_code EOP_Attendance_Dao_delete_subject_attendance(long subject_id);
 
 int EOP_Attendance_Dao_get_visit_count(EOP_Attendance_Count_request request);
 

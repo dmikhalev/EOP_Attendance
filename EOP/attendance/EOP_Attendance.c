@@ -6,6 +6,6 @@ void EOP_Attendance_api_matcher(struct mg_connection *pConnection, struct mg_htt
     EOP_Attendance_Controller_api_match(pConnection, pMessage);
 }
 
-int EOP_Attendance_create_attendance_db(sqlite3 *db, char **err_msg) {
+EOP_Attendance_err_code EOP_Attendance_create_attendance_db(sqlite3 *db, char **err_msg) {
     return EOP_Attendance_Dao_create(db, err_msg);
 }

@@ -1,6 +1,6 @@
 #include <EOP/attendance/db/dao/EOP_Attendance_Dao.h>
 
-int EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg) {
+EOP_Attendance_err_code EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg) {
     return sqlite3_exec(db, EOP_Attendance_Table_create, 0, 0, err_msg);
 }
 
@@ -18,7 +18,7 @@ static int check_error(int rc, sqlite3 *db) {
     return 0;
 }
 
-int EOP_Attendance_Dao_save_attendance(EOP_Attendance attendance) {
+EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance(EOP_Attendance attendance) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {
@@ -43,7 +43,7 @@ int EOP_Attendance_Dao_save_attendance(EOP_Attendance attendance) {
     return 0;
 }
 
-int EOP_Attendance_Dao_save_attendance_list(struct mg_str attendanceList) {
+EOP_Attendance_err_code EOP_Attendance_Dao_save_attendance_list(struct mg_str attendanceList) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {
@@ -122,7 +122,7 @@ char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
     return response;
 }
 
-int EOP_Attendance_Dao_update_attendance(EOP_Attendance attendance) {
+EOP_Attendance_err_code EOP_Attendance_Dao_update_attendance(EOP_Attendance attendance) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {
@@ -148,7 +148,7 @@ int EOP_Attendance_Dao_update_attendance(EOP_Attendance attendance) {
     return 0;
 }
 
-int EOP_Attendance_Dao_delete_attendance(long attendance_id) {
+EOP_Attendance_err_code EOP_Attendance_Dao_delete_attendance(long attendance_id) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {
@@ -169,7 +169,7 @@ int EOP_Attendance_Dao_delete_attendance(long attendance_id) {
     return 0;
 }
 
-int EOP_Attendance_Dao_delete_student_attendance(long student_id) {
+EOP_Attendance_err_code EOP_Attendance_Dao_delete_student_attendance(long student_id) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {
@@ -190,7 +190,7 @@ int EOP_Attendance_Dao_delete_student_attendance(long student_id) {
     return 0;
 }
 
-int EOP_Attendance_Dao_delete_subject_attendance(long subject_id) {
+EOP_Attendance_err_code EOP_Attendance_Dao_delete_subject_attendance(long subject_id) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {

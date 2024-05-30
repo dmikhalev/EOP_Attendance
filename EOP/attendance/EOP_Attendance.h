@@ -10,6 +10,8 @@ extern "C" {
 #include <third_party/mongoose.h>
 #include <third_party/sqlite3.h>
 
+typedef short EOP_Attendance_err_code;
+
 typedef long EOP_Attendance_id;
 typedef long EOP_Attendance_student_id;
 typedef long EOP_Attendance_subject_id;
@@ -47,7 +49,7 @@ typedef struct {
 
 void EOP_Attendance_api_matcher(struct mg_connection *pConnection, struct mg_http_message *pMessage);
 
-int EOP_Attendance_create_attendance_db(sqlite3 *db, char **err_msg);
+EOP_Attendance_err_code EOP_Attendance_create_attendance_db(sqlite3 *db, char **err_msg);
 
 #ifdef __cplusplus
 }
