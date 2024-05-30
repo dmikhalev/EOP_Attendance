@@ -11,13 +11,13 @@ extern "C" {
 
 EOP_Attendance EOP_Attendance_Mapper_to_attendance(struct mg_str json);
 
-Count_request EOP_Attendance_Mapper_to_count_request(struct mg_str json);
+EOP_Attendance_Count_request EOP_Attendance_Mapper_to_count_request(struct mg_str json);
 
-Delete_attendance_request EOP_Attendance_Mapper_to_delete_attendance_request(struct mg_str json);
+EOP_Attendance_Delete_attendance_request EOP_Attendance_Mapper_to_delete_attendance_request(struct mg_str json);
 
-Delete_student_attendance_request EOP_Attendance_Mapper_to_delete_student_attendance_request(struct mg_str json);
+EOP_Attendance_Delete_student_attendance_request EOP_Attendance_Mapper_to_delete_student_attendance_request(struct mg_str json);
 
-Delete_subject_attendance_request EOP_Attendance_Mapper_to_delete_subject_attendance_request(struct mg_str json);
+EOP_Attendance_Delete_subject_attendance_request EOP_Attendance_Mapper_to_delete_subject_attendance_request(struct mg_str json);
 
 char *EOP_Attendance_Mapper_to_json(EOP_Attendance *attendance);
 

@@ -211,7 +211,7 @@ int EOP_Attendance_Dao_delete_subject_attendance(long subject_id) {
     return 0;
 }
 
-int EOP_Attendance_Dao_get_visit_count(Count_request request) {
+int EOP_Attendance_Dao_get_visit_count(EOP_Attendance_Count_request request) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {
@@ -240,7 +240,7 @@ int EOP_Attendance_Dao_get_visit_count(Count_request request) {
     return result;
 }
 
-int EOP_Attendance_Dao_get_absence_count(Count_request request) {
+int EOP_Attendance_Dao_get_absence_count(EOP_Attendance_Count_request request) {
     sqlite3 *db;
     int rc = sqlite3_open("attendance.db", &db);
     if (!isOk(rc)) {

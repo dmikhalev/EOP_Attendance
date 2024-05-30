@@ -27,9 +27,9 @@ int EOP_Attendance_Dao_delete_student_attendance(long student_id);
 
 int EOP_Attendance_Dao_delete_subject_attendance(long subject_id);
 
-int EOP_Attendance_Dao_get_visit_count(Count_request request);
+int EOP_Attendance_Dao_get_visit_count(EOP_Attendance_Count_request request);
 
-int EOP_Attendance_Dao_get_absence_count(Count_request request);
+int EOP_Attendance_Dao_get_absence_count(EOP_Attendance_Count_request request);
 
 #ifdef __cplusplus
 }

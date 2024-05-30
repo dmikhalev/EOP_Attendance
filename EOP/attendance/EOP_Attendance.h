@@ -30,19 +30,19 @@ typedef struct {
     EOP_Attendance_student_id student_id;
     EOP_Attendance_subject_id subject_id;
     EOP_Attendance_course course;
-} Count_request;
+} EOP_Attendance_Count_request;
 
 typedef struct {
     EOP_Attendance_id id;
-} Delete_attendance_request;
+} EOP_Attendance_Delete_attendance_request;
 
 typedef struct {
     EOP_Attendance_id student_id;
-} Delete_student_attendance_request;
+} EOP_Attendance_Delete_student_attendance_request;
 
 typedef struct {
     EOP_Attendance_subject_id subject_id;
-} Delete_subject_attendance_request;
+} EOP_Attendance_Delete_subject_attendance_request;
 
 
 void EOP_Attendance_api_matcher(struct mg_connection *pConnection, struct mg_http_message *pMessage);
