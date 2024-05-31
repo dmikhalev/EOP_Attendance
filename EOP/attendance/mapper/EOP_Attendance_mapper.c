@@ -78,7 +78,7 @@ char *EOP_Attendance_Mapper_to_json(EOP_Attendance attendance) {
             attendance.student_id,
             attendance.subject_id,
             attendance.course,
-            &isVisit,
+            isVisit,
             attendance.date
     );
     return buf;
