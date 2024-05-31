@@ -109,7 +109,7 @@ char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
         rc = sqlite3_step(stmt);
         strcat(response, EOP_Attendance_Mapper_to_json(attendance));
         if (rc == SQLITE_ROW) {
-            strcat(response, ",");
+            strcat(response, ",\n");
         }
     }
     strcat(response, "\n]");
