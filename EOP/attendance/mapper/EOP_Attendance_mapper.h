@@ -19,7 +19,7 @@ EOP_Attendance_Delete_student_attendance_request EOP_Attendance_Mapper_to_delete
 
 EOP_Attendance_Delete_subject_attendance_request EOP_Attendance_Mapper_to_delete_subject_attendance_request(struct mg_str json);
 
-char *EOP_Attendance_Mapper_to_json(EOP_Attendance *attendance);
+char *EOP_Attendance_Mapper_to_json(EOP_Attendance attendance);
 
 #ifdef __cplusplus
 }

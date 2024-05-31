@@ -14,7 +14,8 @@ static int EOP_Attendance_get_course(struct mg_str json) {
 
 static bool EOP_Attendance_get_is_visit(struct mg_str json) {
     bool b = NULL;
-    return mg_json_get_bool(json, "$.is_visit", &b);
+    mg_json_get_bool(json, "$.is_visit", &b);
+    return b;
 }
 
 static long EOP_Attendance_get_id(struct mg_str json) {
@@ -61,9 +62,9 @@ EOP_Attendance_Delete_subject_attendance_request EOP_Attendance_Mapper_to_delete
     return request;
 }
 
-char *EOP_Attendance_Mapper_to_json(EOP_Attendance *attendance) {
-    char obj[256];
-    sprintf(obj, "{\n"
+char *EOP_Attendance_Mapper_to_json(EOP_Attendance attendance) {
+    char *obj="";
+    strcat(obj, "{\n"
                  "    \"id\": %ld,\n"
                  "    \"student_id\": %ld,\n"
                  "    \"subject_id\": %ld, \n"
@@ -71,12 +72,12 @@ char *EOP_Attendance_Mapper_to_json(EOP_Attendance *attendance) {
                  "    \"is_visit\": %b,\n"
                  "    \"date\": \"%s\"\n"
                  "}",
-            attendance->id,
-            attendance->student_id,
-            attendance->subject_id,
-            attendance->course,
-            attendance->is_visit,
-            attendance->date
+            attendance.id,
+            attendance.student_id,
+            attendance.subject_id,
+            attendance.course,
+            attendance.is_visit,
+            attendance.date
     );
     return obj;
 }

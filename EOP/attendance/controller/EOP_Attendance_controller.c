@@ -32,7 +32,7 @@ static void EOP_Attendance_success_201_replay(struct mg_connection *pConnection)
 static void EOP_Attendance_handle_get_all(struct mg_connection *pConnection, struct mg_http_message *pMessage) {
     char *response = EOP_Attendance_Service_get_attendance_list(EOP_Attendance_Mapper_to_attendance(pMessage->body));
     if (response != NULL) {
-        mg_http_reply(pConnection, 200, "Content-Type: application/json\r\n", "%s", MG_ESC(response));
+        mg_http_reply(pConnection, 200, "Content-Type: application/json\r\n", response);
     } else {
         EOP_Attendance_error_replay(pConnection);
     }

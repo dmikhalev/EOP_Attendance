@@ -1,4 +1,5 @@
 #include <EOP/attendance/db/dao/EOP_Attendance_Dao.h>
+#include <EOP/attendance/db/tables/EOP_Attendance_Table.h>
 
 EOP_Attendance_err_code EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg) {
     return sqlite3_exec(db, EOP_Attendance_Table_create, 0, 0, err_msg);
@@ -98,7 +99,7 @@ char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
     sqlite3_bind_text(stmt, 5, filter.date, -1, SQLITE_TRANSIENT);
 
     rc = sqlite3_step(stmt);
-    char response[256 * 100];
+    char *response = "";
     while (rc == SQLITE_ROW) {
         EOP_Attendance attendance;
         attendance.id = sqlite3_column_int(stmt, 0);
@@ -109,12 +110,12 @@ char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
         attendance.date = sqlite3_column_text(stmt, 5);
         rc = sqlite3_step(stmt);
         if (rc == SQLITE_ROW) {
-            sprintf(response, "%s\n%s,", response, EOP_Attendance_Mapper_to_json(&attendance));
+            strcat(response, EOP_Attendance_Mapper_to_json(attendance));
         } else {
-            sprintf(response, "%s\n%s", response, EOP_Attendance_Mapper_to_json(&attendance));
+            strcat(response, EOP_Attendance_Mapper_to_json(attendance));
         }
     }
-    sprintf(response, "%s\n]", response);
+    strcat(response, "\n]");
     sqlite3_finalize(stmt);
     if (EOP_Attendance_check_error(rc, db) == 1) return "";
     sqlite3_close(db);

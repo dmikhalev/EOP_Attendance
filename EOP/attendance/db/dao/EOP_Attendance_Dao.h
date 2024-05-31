@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <third_party/sqlite3.h>
-#include <EOP/attendance/db/tables/EOP_Attendance_Table.h>
 #include <EOP/attendance/EOP_Attendance.h>
 #include <EOP/attendance/mapper/EOP_Attendance_mapper.h>
 

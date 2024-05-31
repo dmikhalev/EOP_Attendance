@@ -3,8 +3,8 @@
 #include <EOP/attendance/EOP_Attendance.h>
 
 
-static bool isOk(int rc) {
-    return rc != SQLITE_OK;
+static bool EOP_Attendance_is_ok(int rc) {
+    return rc == SQLITE_OK;
 }
 
 static EOP_Attendance_err_code create_db() {
