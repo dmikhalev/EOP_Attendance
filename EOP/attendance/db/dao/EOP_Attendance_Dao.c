@@ -89,17 +89,15 @@ char *EOP_Attendance_Dao_get_attendance_list(EOP_Attendance filter) {
                        "WHERE (?1 = -1 OR ?1 = student_id)\n"
                        "  AND (?2 = -1 OR ?2 = subject_id)\n"
                        "  AND (?3 = -1 OR ?3 = course)\n"
-                       "  AND (?4 IS NULL OR ?4 = is_visit)\n"
-                       "  AND (?5 IS NULL OR ?5 = date)",
+                       "  AND (?4 IS NULL OR ?5 = date)",
                        -1, &stmt, 0);
     sqlite3_bind_int(stmt, 1, filter.student_id);
     sqlite3_bind_int(stmt, 2, filter.subject_id);
     sqlite3_bind_int(stmt, 3, filter.course);
-    sqlite3_bind_int(stmt, 4, filter.is_visit);
-    sqlite3_bind_text(stmt, 5, filter.date, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 4, filter.date, -1, SQLITE_TRANSIENT);
 
     rc = sqlite3_step(stmt);
-    char *response = "";
+    char *response = "[\n";
     while (rc == SQLITE_ROW) {
         EOP_Attendance attendance;
         attendance.id = sqlite3_column_int(stmt, 0);

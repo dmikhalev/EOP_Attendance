@@ -63,21 +63,23 @@ EOP_Attendance_Delete_subject_attendance_request EOP_Attendance_Mapper_to_delete
 }
 
 char *EOP_Attendance_Mapper_to_json(EOP_Attendance attendance) {
-    char *obj="";
-    strcat(obj, "{\n"
-                 "    \"id\": %ld,\n"
-                 "    \"student_id\": %ld,\n"
-                 "    \"subject_id\": %ld, \n"
-                 "    \"course\": %d,\n"
-                 "    \"is_visit\": %b,\n"
-                 "    \"date\": \"%s\"\n"
-                 "}",
+    char buf[512];
+    char* isVisit = attendance.is_visit ? "true" : "false";
+    snprintf(buf, 512, 
+                "    {\n"
+                "        \"id\": %ld,\n"
+                "        \"student_id\": %ld,\n"
+                "        \"subject_id\": %ld, \n"
+                "        \"course\": %d,\n"
+                "        \"is_visit\": %s,\n"
+                "        \"date\": \"%s\"\n"
+                "    }",
             attendance.id,
             attendance.student_id,
             attendance.subject_id,
             attendance.course,
-            attendance.is_visit,
+            &isVisit,
             attendance.date
     );
-    return obj;
+    return buf;
 }
