@@ -1,8 +1,16 @@
 #include <EOP/attendance/db/dao/EOP_Attendance_Dao.h>
-#include <EOP/attendance/db/tables/EOP_Attendance_Table.h>
 
 EOP_Attendance_err_code EOP_Attendance_Dao_create(sqlite3 *db, char **err_msg) {
-    return sqlite3_exec(db, EOP_Attendance_Table_create, 0, 0, err_msg);
+    return sqlite3_exec(db, 
+        "CREATE TABLE IF NOT EXISTS " ATTENDANCE " (\n"
+        "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+        "    student_id INTEGER,\n"
+        "    subject_id INTEGER,\n"
+        "    course INTEGER,\n"
+        "    is_visit BOOLEAN,\n"
+        "    date DATE"
+        ")"
+        , 0, 0, err_msg);
 }
 
 static bool EOP_Attendance_is_ok(int rc) {

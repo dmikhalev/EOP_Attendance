@@ -4,8 +4,6 @@ add_library(EOP_Attendance
         EOP_Attendance.h
         controller/EOP_Attendance_controller.c
         controller/EOP_Attendance_controller.h
-        db/tables/EOP_Attendance_Table.c
-        db/tables/EOP_Attendance_Table.h
         db/dao/EOP_Attendance_Dao.c
         db/dao/EOP_Attendance_Dao.h
         mapper/EOP_Attendance_mapper.c

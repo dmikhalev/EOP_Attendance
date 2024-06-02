@@ -3,6 +3,8 @@
 #include <EOP/attendance/EOP_Attendance.h>
 #include <EOP/attendance/mapper/EOP_Attendance_mapper.h>
 
+#define ATTENDANCE "attendance"
+
 #ifndef EOP_EOP_ATTENDANCE_DAO_H
 #define EOP_EOP_ATTENDANCE_DAO_H
 

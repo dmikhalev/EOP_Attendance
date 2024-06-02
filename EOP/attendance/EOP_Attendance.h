@@ -47,9 +47,7 @@ typedef struct {
 } EOP_Attendance_Delete_subject_attendance_request;
 
 
-void EOP_Attendance_api_matcher(struct mg_connection *pConnection, struct mg_http_message *pMessage);
-
-EOP_Attendance_err_code EOP_Attendance_create_attendance_db(sqlite3 *db, char **err_msg);
+int EOP_Attendance_start();
 
 #ifdef __cplusplus
 }
